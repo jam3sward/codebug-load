@@ -13,7 +13,7 @@ REM This is the filename to be transferred to the CodeBug
 set payload=%1
 
 REM Check that we were given a filename
-if "%payload%"=="" (
+if %payload%=="" (
   echo Please supply a filename
   goto exit
 )
