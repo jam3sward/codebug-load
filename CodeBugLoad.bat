@@ -33,18 +33,26 @@ if not %extension%==.cbg (
   goto exit
 )
 
+REM Generate temporary file name
+set tempfile=%temp%\CBG%random%.TMP
+
 REM Now we have to find the CodeBug, so we can transfer
 REM the file onto it
 
 REM Get a list of all the logical disks including name and volumename
 REM for example: E: CodeBug
-wmic logicaldisk get name,volumename |more >disks.txt
+REM The more command is needed to convert the unicode output of wmic
+REM to plain text that we can process with for
+wmic logicaldisk get name,volumename |more >%tempfile%
 
 REM Find out which one has volume name CodeBug
 set codebug=""
-for /f "tokens=1,2 skip=1" %%i in (disks.txt) do (
+for /f "tokens=1,2 skip=1" %%i in (%tempfile%) do (
   if %%j==CodeBug set codebug=%%i
 )
+
+REM Delete temporary file
+del %tempfile%
 
 REM If we have CodeBug drive letter
 if not %codebug%=="" (
